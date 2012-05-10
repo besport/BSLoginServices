@@ -112,6 +112,7 @@
 		E73145C8155C2C520040206D /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		E73145E6155C2DBD0040206D /* FXNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXNavigationController.h; sourceTree = "<group>"; };
 		E73145E7155C2DBD0040206D /* FXNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXNavigationController.m; sourceTree = "<group>"; };
+		E73145EE155C46700040206D /* BSLoginServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSLoginServices.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +223,7 @@
 				E731458F155C297E0040206D /* BSTwitterLoginSegue.m */,
 				E7314590155C297E0040206D /* BSTwitterLoginService.h */,
 				E7314591155C297E0040206D /* BSTwitterLoginService.m */,
+				E73145EE155C46700040206D /* BSLoginServices.h */,
 			);
 			path = BSLoginServices;
 			sourceTree = "<group>";
@@ -538,6 +540,7 @@
 				E7314583155C29310040206D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E73145AA155C2BA60040206D /* Build configuration list for PBXNativeTarget "Facebook" */ = {
 			isa = XCConfigurationList;
@@ -546,6 +549,7 @@
 				E73145AC155C2BA60040206D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
