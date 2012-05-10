@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BSFacebookLoginService.h"
+#import "BSTwitterLoginService.h"
 
-@interface FXAppDelegate : UIResponder <UIApplicationDelegate>
+@interface FXAppDelegate : UIResponder <UIApplicationDelegate, BSFacebookLoginProvider, BSTwitterLoginProvider>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, retain) BSFacebookLoginService *facebookLoginService;
+@property (nonatomic, retain) BSTwitterLoginService *twitterLoginService;
 
 @end

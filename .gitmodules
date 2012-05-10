@@ -1,0 +1,3 @@
+[submodule "Vendor/Facebook"]
+	path = Vendor/Facebook
+	url = git://github.com/facebook/facebook-ios-sdk.git

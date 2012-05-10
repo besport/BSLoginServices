@@ -13,6 +13,7 @@
 @end
 
 @implementation FXViewController
+@synthesize activityIndicator;
 
 - (void)viewDidLoad
 {
@@ -22,6 +23,7 @@
 
 - (void)viewDidUnload
 {
+    [self setActivityIndicator:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }

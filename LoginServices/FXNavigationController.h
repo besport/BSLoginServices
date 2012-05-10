@@ -1,5 +1,5 @@
 //
-//  FXViewController.h
+//  FXNavigationController.h
 //  LoginServices
 //
 //  Created by François-Xavier Thomas on 5/10/12.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FXViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@interface FXNavigationController : UINavigationController
+- (IBAction) logout;
 @end
