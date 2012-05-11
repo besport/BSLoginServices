@@ -19,6 +19,12 @@
 @synthesize accountStore = _accountStore;
 @synthesize twitterAccount = _twitterAccount;
 @synthesize twitterData = _twitterData;
+@synthesize email;
+@synthesize firstName;
+@synthesize lastName;
+@synthesize birthdayDate;
+@synthesize twitterId;
+@synthesize screenName;
 
 /**
  * Used internally to perform the account selection
@@ -29,9 +35,7 @@
     
     // If there are no accounts, we fail
     if(twitterAccounts == nil || [twitterAccounts count] == 0) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self failWithError:BSTwitterLoginServiceErrorNoAccounts];
-        });
+        [self failWithError:BSTwitterLoginServiceErrorNoAccounts];
         return NO;
         
     // Else, we set the first Twitter Accountsssss
@@ -55,9 +59,7 @@
     [req performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         // If there was an error making the request, display a message to the user
         if(error != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self failWithError:BSTwitterLoginServiceErrorConnectionFailed];
-            });
+            [self failWithError:BSTwitterLoginServiceErrorConnectionFailed];
             return;
         }
         
@@ -67,17 +69,20 @@
         
         // If there was an error decoding the JSON, display a message to the user
         if(jsonError != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self failWithError:BSTwitterLoginServiceErrorParsingError];
-            });
+            [self failWithError:BSTwitterLoginServiceErrorParsingError];
             return;
         }
         
-        // Make sure to perform our operation back on the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.twitterData = resp;
-            [self succeed];
-        });
+        self.twitterData = resp;
+        
+        self.twitterId = [resp objectForKey:@"id_str"];
+        self.screenName = [resp objectForKey:@"screen_name"];
+        self.firstName = [resp objectForKey:@"name"];
+        self.lastName = @"";
+        self.birthdayDate = nil;
+        self.email = nil; // The e-mail address isn't available through the Twitter API
+        
+        [self succeed];
     }];
     
     return YES;
@@ -99,11 +104,8 @@
         }
         
         // Else, fail
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self failWithError:BSTwitterLoginServiceErrorNotGranted];
-        });
+        [self failWithError:BSTwitterLoginServiceErrorNotGranted];
     }];
-    
 }
 
 - (NSString*) localizedErrorMessage:(NSUInteger)errorCode {

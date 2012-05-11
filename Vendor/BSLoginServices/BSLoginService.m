@@ -25,17 +25,21 @@
 #pragma mark - Convenience methods
 
 - (void) succeed {
-    self.isLoggedIn = YES;
-    [self save];
-    [self.delegate loginServiceDidSucceed:self];
-    self.delegate = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isLoggedIn = YES;
+        [self save];
+        [self.delegate loginServiceDidSucceed:self];
+        self.delegate = nil;
+    });
 }
 
 - (void) logoutSuccessful {
-    self.isLoggedIn = NO;
-    [self save];
-    [self.delegate loginServiceDidSucceed:self];
-    self.delegate = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isLoggedIn = NO;
+        [self save];
+        [self.delegate loginServiceDidSucceed:self];
+        self.delegate = nil;
+    });
 }
 
 - (void) fail {
@@ -43,15 +47,21 @@
 }
 
 - (void) failWithError:(NSUInteger)error {
-    self.isLoggedIn = NO;
-    [self save];
-    [self.delegate loginServiceDidFail:self error:error];
-    self.delegate = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isLoggedIn = NO;
+        [self save];
+        [self.delegate loginServiceDidFail:self error:error];
+        self.delegate = nil;
+    });
 }
 
 #pragma mark - Methods to implement in subclasses
 
 - (void) login {
+    NSLog(@"LoginProvider: Not Implemented");
+}
+
+- (void) login:(id)dataSource {
     NSLog(@"LoginProvider: Not Implemented");
 }
 
@@ -64,6 +74,10 @@
 }
 
 - (void) restore {
+    NSLog(@"LoginProvider: Not Implemented");
+}
+
+- (void) signup:(NSString *)password {
     NSLog(@"LoginProvider: Not Implemented");
 }
 

@@ -11,6 +11,11 @@
 @implementation BSFacebookLoginService
 @synthesize facebook = _facebook;
 @synthesize permissions = _permissions;
+@synthesize email = _email;
+@synthesize lastName = _lastName;
+@synthesize firstName = _firstName;
+@synthesize facebookId = _facebookId;
+@synthesize birthdayDate = _birthdayDate;
 
 - (id) initWithAppId:(NSString*)appId {
     self = [super init];
@@ -32,7 +37,9 @@
     }
     
     else if (![_facebook isSessionValid]) [_facebook authorize:_permissions];
-    else [self succeed];
+    else {
+        [_facebook requestWithGraphPath:@"me" andDelegate:self];
+    }
 }
 
 - (void) logout {
@@ -80,12 +87,28 @@
 
 #pragma mark - Facebook delegate
 
+- (void) request:(FBRequest *)request didLoad:(id)result {
+    if ([result isKindOfClass:[NSDictionary class]])
+    {
+        self.email = [result objectForKey: @"email"];
+        self.firstName = [result objectForKey:@"first_name"];
+        self.lastName = [result objectForKey:@"last_name"];
+        self.facebookId = [result objectForKey:@"id"];
+        self.birthdayDate = nil;
+        [self succeed];
+    }
+}
+
+- (void) request:(FBRequest *)request didFailWithError:(NSError *)error {
+    [self failWithError:BSFacebookLoginServiceErrorFailedToRetrieveInfo];
+}
+
 - (void) fbDidExtendToken:(NSString *)accessToken expiresAt:(NSDate *)expiresAt {
     [self succeed];
 }
 
 - (void) fbDidLogin {
-    [self succeed];
+    [_facebook requestWithGraphPath:@"me" andDelegate:self];
 }
 
 - (void) fbDidLogout {

@@ -22,9 +22,21 @@ typedef enum {
 - (BSTwitterLoginService*) twitterLoginService;
 @end
 
-@interface BSTwitterLoginService : BSLoginService
+@protocol BSTwitterUserAuthDataSource <NSObject>
+- (NSString*) twitterId;
+@end
+
+@interface BSTwitterLoginService : BSLoginService <BSUserInfoDataSource, BSTwitterUserAuthDataSource>
 @property (nonatomic, retain) ACAccountStore *accountStore;
 @property (nonatomic, retain) ACAccount *twitterAccount;
 @property (nonatomic, retain) NSDictionary *twitterData;
+
+@property (nonatomic, retain) NSString *email;
+@property (nonatomic, retain) NSString *firstName;
+@property (nonatomic, retain) NSString *lastName;
+@property (nonatomic, retain) NSDate *birthdayDate;
+@property (nonatomic, retain) NSString *screenName;
+
+@property (nonatomic, retain) NSString *twitterId;
 
 @end

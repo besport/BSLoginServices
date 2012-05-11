@@ -52,6 +52,7 @@
 		E73145E0155C2C520040206D /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = E73145C7155C2C520040206D /* SBJsonWriter.h */; };
 		E73145E1155C2C520040206D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = E73145C8155C2C520040206D /* SBJsonWriter.m */; };
 		E73145E8155C2DBD0040206D /* FXNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = E73145E7155C2DBD0040206D /* FXNavigationController.m */; };
+		E7CF81A5155DAFCF007D5FCC /* FXHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7CF81A4155DAFCF007D5FCC /* FXHomeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +114,8 @@
 		E73145E6155C2DBD0040206D /* FXNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXNavigationController.h; sourceTree = "<group>"; };
 		E73145E7155C2DBD0040206D /* FXNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXNavigationController.m; sourceTree = "<group>"; };
 		E73145EE155C46700040206D /* BSLoginServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BSLoginServices.h; sourceTree = "<group>"; };
+		E7CF81A3155DAFCF007D5FCC /* FXHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXHomeViewController.h; sourceTree = "<group>"; };
+		E7CF81A4155DAFCF007D5FCC /* FXHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXHomeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +186,8 @@
 				E731457D155C29310040206D /* FXViewController.m */,
 				E73145E6155C2DBD0040206D /* FXNavigationController.h */,
 				E73145E7155C2DBD0040206D /* FXNavigationController.m */,
+				E7CF81A3155DAFCF007D5FCC /* FXHomeViewController.h */,
+				E7CF81A4155DAFCF007D5FCC /* FXHomeViewController.m */,
 				E731456E155C29310040206D /* Supporting Files */,
 			);
 			path = LoginServices;
@@ -339,6 +344,7 @@
 			attributes = {
 				CLASSPREFIX = FX;
 				LastUpgradeCheck = 0430;
+				ORGANIZATIONNAME = BeSport;
 			};
 			buildConfigurationList = E731455D155C29310040206D /* Build configuration list for PBXProject "LoginServices" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -385,6 +391,7 @@
 				E7314596155C297E0040206D /* BSTwitterLoginSegue.m in Sources */,
 				E7314597155C297E0040206D /* BSTwitterLoginService.m in Sources */,
 				E73145E8155C2DBD0040206D /* FXNavigationController.m in Sources */,
+				E7CF81A5155DAFCF007D5FCC /* FXHomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
