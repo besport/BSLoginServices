@@ -12,16 +12,26 @@
 @synthesize service = _service;
 
 - (void) perform {
+    // Lock the source view controller
+    if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
+        [(UIViewController*)self.sourceViewController view].userInteractionEnabled = NO;
+    }
+
     if ([self.sourceViewController respondsToSelector:@selector(activityIndicator)]) {
         UIActivityIndicatorView *activity = [self.sourceViewController performSelector:@selector(activityIndicator)];
         [activity startAnimating];
     }
-    
+        
     [self.service setDelegate:self];
     [self.service login];
 }
 
 - (void) loginServiceDidFail:(BSLoginService *)svc error:(NSUInteger)code {
+    // Unlock the source view controller
+    if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
+        [(UIViewController*)self.sourceViewController view].userInteractionEnabled = YES;
+    }
+    
     // Display the failure
     NSString *message = [_service localizedErrorMessage:code];
     NSString *title = [_service localizedErrorTitle:code];
@@ -34,7 +44,12 @@
     }
 }
 
-- (void) loginServiceDidSucceed:(BSLoginService *)svc {    
+- (void) loginServiceDidSucceed:(BSLoginService *)svc {
+    // Unlock the source view controller
+    if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
+        [(UIViewController*)self.sourceViewController view].userInteractionEnabled = YES;
+    }
+    
     // If no source/destination view controller, do nothing
     if (nil == self.sourceViewController || nil == self.destinationViewController) return;
     
