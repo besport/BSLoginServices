@@ -104,7 +104,7 @@
 }
 
 - (void) fbDidExtendToken:(NSString *)accessToken expiresAt:(NSDate *)expiresAt {
-    [self succeed];
+    [_facebook requestWithGraphPath:@"me" andDelegate:self];
 }
 
 - (void) fbDidLogin {
