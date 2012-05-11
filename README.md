@@ -47,7 +47,7 @@ At the moment, only Twitter and Facebook are supported, but it should be easy to
   
   4. Setup Facebook
 	  1. Create your Facebook App, you should get an App ID from them. See [the Facebook docs](https://developers.facebook.com/docs/mobile/ios/build/) for more info.
-	  2. Add your custom URL (should be `fb<app id>`, and replace `<app id>` by your own Facebook App ID) to the projects `Info.plist` file. See the `LoginServices-Info.plist` file in this project for an example.
+	  2. Add your custom URL (should be `fb<app id>`, and replace `<app id>` by your own Facebook App ID) to the projects `Info.plist` file. See the `LoginServices-Info.plist` file in this project for an example. Also verify that the `BSFacebookLoginService` allocated earlier in the app delegate uses your App ID.
 	  4. Add the URL handlers to your application delegate :
 	  
 	     ```
@@ -61,3 +61,23 @@ At the moment, only Twitter and Facebook are supported, but it should be easy to
 	     ```
 	     
 At this point, you should be done (phew!), and you can start adding custom segues with classes `BSFacebookLoginSegue` and `BSTwitterLoginSegue`.
+
+# Custom Login Services
+
+You can use your own login service the same way.
+  
+  1. Create your login service class, inheriting from the base class `BSLoginService`.
+  2. The methods you can override are :
+     * `login` : Checks whether the user can login. If you need to add credentials and can't rely on another API, override `login:(id)dataSource`.
+     * `logout` : Logs the user out
+     * `save` : Save session (to `NSUserDefaults`, usually)
+     * `restore` : Restore session
+     * You _should_ use `[self succeed]`, `[self fail]` and `[self failWithError:code]` to notify the delegate that everything is done.
+     
+  3. Create a custom segue, subclass of `BSLoginSegue`, and override the `service` method to point towards your custom login service (check out the code in `BSTwitterLoginSegue` for instance)
+  
+Now you can directly use the segue in your storyboard!
+
+# Here be dragons!
+
+This code is still very new, so there might be bugs! If you find one, create a GitHub issue and tell me what happened!
