@@ -10,12 +10,6 @@
 #import "BSLoginService.h"
 #import "FBConnect.h"
 
-typedef enum {
-    BSFacebookLoginServiceErrorConnectionFailed = 0,
-    BSFacebookLoginServiceErrorNotInitialized = 1,
-    BSFacebookLoginServiceErrorFailedToRetrieveInfo = 2
-} BSFacebookLoginServiceError;
-
 @class BSFacebookLoginService;
 @protocol BSFacebookLoginProvider <NSObject>
 - (BSFacebookLoginService*) facebookLoginService;
@@ -23,18 +17,24 @@ typedef enum {
 
 @protocol BSFacebookUserAuthDataSource <NSObject>
 - (NSString*) facebookId;
+- (NSString*) facebookSessionToken;
 @end
 
 @interface BSFacebookLoginService : BSLoginService <FBSessionDelegate, FBRequestDelegate, BSUserInfoDataSource, BSFacebookUserAuthDataSource>
+
+// Some facebook-related properties
 @property (nonatomic, retain) Facebook* facebook;
 @property (nonatomic, retain) NSArray *permissions;
 
+// User information
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *firstName;
 @property (nonatomic, retain) NSString *lastName;
 @property (nonatomic, retain) NSDate *birthdayDate;
 
+// Facebook information
 @property (nonatomic, retain) NSString *facebookId;
+@property (nonatomic, retain) NSString *facebookSessionToken;
 
 - (id) initWithAppId:(NSString*)appId;
 

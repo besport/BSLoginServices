@@ -11,7 +11,7 @@
 @class BSLoginService;
 @protocol BSLoginServiceDelegate <NSObject>
 - (void) loginServiceDidSucceed:(BSLoginService*)svc;
-- (void) loginServiceDidFail:(BSLoginService*)svc error:(NSUInteger)code;
+- (void) loginServiceDidFail:(BSLoginService*)svc error:(NSError*)error;
 @end
 
 @protocol BSUserInfoDataSource <NSObject>
@@ -30,22 +30,18 @@
 
 // The delegate is **retained** and will be set to nil when the operation completes
 @property (nonatomic, retain) id<BSLoginServiceDelegate> delegate;
-@property (nonatomic, assign) BOOL isLoggedIn;
 
+@property (nonatomic, weak) id dataSource;
+@property (nonatomic, assign) BOOL isLoggedIn;
+@property (nonatomic, assign) BOOL shouldSignupAutomatically;
+
+- (void) signup;
 - (void) login;
 - (void) logout;
 - (void) save;
 - (void) restore;
 
-- (void) login:(id)dataSource;
-- (void) signup:(id)dataSource;
-
-- (NSString*) localizedErrorMessage:(NSUInteger)errorCode;
-- (NSString*) localizedErrorTitle:(NSUInteger)errorCode;
-
-- (void) fail;
-- (void) failWithError:(NSUInteger)error;
 - (void) succeed;
-- (void) logoutSuccessful;
+- (void) failWithError:(NSError*)error;
 
 @end

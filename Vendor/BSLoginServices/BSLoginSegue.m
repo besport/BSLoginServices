@@ -8,34 +8,60 @@
 
 #import "BSLoginSegue.h"
 
-@implementation BSLoginSegue
-@synthesize service = _service;
-
-- (void) perform {
-    // Lock the source view controller
-    if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
-        [(UIViewController*)self.sourceViewController view].userInteractionEnabled = NO;
-    }
-
-    if ([self.sourceViewController respondsToSelector:@selector(activityIndicator)]) {
-        UIActivityIndicatorView *activity = [self.sourceViewController performSelector:@selector(activityIndicator)];
-        [activity startAnimating];
-    }
-        
-    [self.service setDelegate:self];
-    [self.service login];
+@interface BSLoginSegue() {
+    NSUInteger currentServiceId;
 }
 
-- (void) loginServiceDidFail:(BSLoginService *)svc error:(NSUInteger)code {
+@end
+
+@implementation BSLoginSegue
+
+- (BSLoginService*) serviceForId:(NSUInteger)sid {
+    NSLog(@"BSLoginSegue: Not Implemented");
+    return nil;
+}
+
+- (NSUInteger) serviceCount {
+    NSLog(@"BSLoginSegue: Not Implemented");
+    return 0;
+}
+
+- (BOOL) serviceNeedsDataSource:(NSUInteger)sid {
+    NSLog(@"BSLoginSegue: Not Implemented");
+    return NO;
+}
+
+- (void) perform {
+    if (currentServiceId == 0) {
+        // Lock the source view controller
+        if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
+            [(UIViewController*)self.sourceViewController view].userInteractionEnabled = NO;
+        }
+        
+        if ([self.sourceViewController respondsToSelector:@selector(activityIndicator)]) {
+            UIActivityIndicatorView *activity = [self.sourceViewController performSelector:@selector(activityIndicator)];
+            [activity startAnimating];
+        }
+    }
+    
+    if (currentServiceId < [self serviceCount]) {
+        [[self serviceForId:currentServiceId] setDelegate:self];
+        
+        if (currentServiceId == 0) [[self serviceForId:currentServiceId] setDataSource:self.sourceViewController];
+        else [[self serviceForId:currentServiceId] setDataSource:[self serviceForId:currentServiceId-1]];
+        
+        [[self serviceForId:currentServiceId] login];
+    }
+}
+
+- (void) loginServiceDidFail:(BSLoginService *)svc error:(NSError*)error {
     // Unlock the source view controller
     if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
         [(UIViewController*)self.sourceViewController view].userInteractionEnabled = YES;
     }
     
     // Display the failure
-    NSString *message = [_service localizedErrorMessage:code];
-    NSString *title = [_service localizedErrorTitle:code];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:error.domain message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alertView show];
     
     // Stop the activity indicator
@@ -45,21 +71,26 @@
 }
 
 - (void) loginServiceDidSucceed:(BSLoginService *)svc {
-    // Unlock the source view controller
-    if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
-        [(UIViewController*)self.sourceViewController view].userInteractionEnabled = YES;
-    }
-    
-    // If no source/destination view controller, do nothing
-    if (nil == self.sourceViewController || nil == self.destinationViewController) return;
-    
-    // Else, push the new destination controller onto the nav. controller stack
-    UINavigationController *ctrl = [self.sourceViewController navigationController];
-    [ctrl pushViewController:self.destinationViewController animated:YES];
-    
-    // Stop the activity indicator
-    if ([self.sourceViewController respondsToSelector:@selector(activityIndicator)]) {
-        [[self.sourceViewController performSelector:@selector(activityIndicator)] stopAnimating];
+    if (currentServiceId >= [self serviceCount]-1) {
+        // Unlock the source view controller
+        if ([self.sourceViewController isKindOfClass:[UIViewController class]]) {
+            [(UIViewController*)self.sourceViewController view].userInteractionEnabled = YES;
+        }
+        
+        // If no source/destination view controller, do nothing
+        if (nil == self.sourceViewController || nil == self.destinationViewController) return;
+        
+        // Else, push the new destination controller onto the nav. controller stack
+        UINavigationController *ctrl = [self.sourceViewController navigationController];
+        [ctrl pushViewController:self.destinationViewController animated:YES];
+        
+        // Stop the activity indicator
+        if ([self.sourceViewController respondsToSelector:@selector(activityIndicator)]) {
+            [[self.sourceViewController performSelector:@selector(activityIndicator)] stopAnimating];
+        }
+    } else {
+        currentServiceId++;
+        [self perform];
     }
 }
 

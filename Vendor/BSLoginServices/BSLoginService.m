@@ -11,6 +11,8 @@
 @implementation BSLoginService
 @synthesize delegate = _delegate;
 @synthesize isLoggedIn = _isLoggedIn;
+@synthesize dataSource = _dataSource;
+@synthesize shouldSignupAutomatically;
 
 - (id) init {
     self = [super init];
@@ -33,20 +35,7 @@
     });
 }
 
-- (void) logoutSuccessful {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.isLoggedIn = NO;
-        [self save];
-        [self.delegate loginServiceDidSucceed:self];
-        self.delegate = nil;
-    });
-}
-
-- (void) fail {
-    [self failWithError:0];
-}
-
-- (void) failWithError:(NSUInteger)error {
+- (void) failWithError:(NSError*)error {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.isLoggedIn = NO;
         [self save];
@@ -58,10 +47,6 @@
 #pragma mark - Methods to implement in subclasses
 
 - (void) login {
-    NSLog(@"LoginProvider: Not Implemented");
-}
-
-- (void) login:(id)dataSource {
     NSLog(@"LoginProvider: Not Implemented");
 }
 
@@ -77,16 +62,8 @@
     NSLog(@"LoginProvider: Not Implemented");
 }
 
-- (void) signup:(NSString *)password {
+- (void) signup {
     NSLog(@"LoginProvider: Not Implemented");
-}
-
-- (NSString*) localizedErrorMessage:(NSUInteger)errorCode {
-    return NSLocalizedString(@"An unknown error has occured", @"loginservice.unknownerror.message");
-}
-
-- (NSString*) localizedErrorTitle:(NSUInteger)errorCode {
-    return NSLocalizedString(@"Login", @"loginservice.unknownerror.title");
 }
 
 @end

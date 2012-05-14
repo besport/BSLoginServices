@@ -16,7 +16,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.facebookLoginService = [[BSFacebookLoginService alloc] initWithAppId:@"405996246098031"];
+    self.facebookLoginService = [[BSFacebookLoginService alloc] initWithAppId:@""];
     self.twitterLoginService = [[BSTwitterLoginService alloc] init];
     return YES;
 }

@@ -8,14 +8,25 @@
 
 #import "BSFacebookLoginService.h"
 
+@interface BSFacebookLoginService()
+- (NSError*) errorWithDescription:(NSString*)description;
+@end
+
 @implementation BSFacebookLoginService
 @synthesize facebook = _facebook;
 @synthesize permissions = _permissions;
 @synthesize email = _email;
 @synthesize lastName = _lastName;
 @synthesize firstName = _firstName;
-@synthesize facebookId = _facebookId;
 @synthesize birthdayDate = _birthdayDate;
+
+@synthesize facebookSessionToken = _facebookSessionToken;
+@synthesize facebookId = _facebookId;
+
+- (NSError*) errorWithDescription:(NSString *)description {
+    NSError *err = [NSError errorWithDomain:NSLocalizedString(@"Facebook Login", @"facebook.login") code:1 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
+    return err;
+}
 
 - (id) initWithAppId:(NSString*)appId {
     self = [super init];
@@ -33,7 +44,7 @@
 
 - (void) login {
     if (!_facebook) {
-        [self failWithError:BSFacebookLoginServiceErrorNotInitialized];
+        [self failWithError:[self errorWithDescription:NSLocalizedString(@"Facebook initialization failed", @"facebook.initializationFailed")]];
     }
     
     else if (![_facebook isSessionValid]) [_facebook authorize:_permissions];
@@ -43,14 +54,14 @@
 }
 
 - (void) logout {
-    if (!_facebook) [self logoutSuccessful];
-    [_facebook logout];
+    if (_facebook) [_facebook logout];
 }
 
 - (void) save {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:[_facebook accessToken] forKey:@"FBAccessTokenKey"];
-    [defaults setObject:[_facebook expirationDate] forKey:@"FBExpirationDateKey"];
+    if (_facebook.accessToken) [defaults setObject:[_facebook accessToken] forKey:@"FBAccessTokenKey"];
+    if (_facebook.expirationDate) [defaults setObject:[_facebook expirationDate] forKey:@"FBExpirationDateKey"];
+    if (self.facebookId) [defaults setObject:self.facebookId forKey:@"FBFacebookID"];
     [defaults synchronize];
 }
 
@@ -60,28 +71,8 @@
         && [defaults objectForKey:@"FBExpirationDateKey"]) {
         _facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
         _facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-    }
-}
-
-- (NSString*) localizedErrorMessage:(NSUInteger)errorCode {
-    switch (errorCode) {
-        case BSFacebookLoginServiceErrorNotInitialized:
-            return NSLocalizedString(@"Connection not initialized", @"loginservice.facebook.notinitialized.message");
-        case BSFacebookLoginServiceErrorConnectionFailed:
-            return NSLocalizedString(@"Connection failed", @"loginservice.facebook.failed.message");
-        default:
-            return [super localizedErrorMessage:errorCode];
-    }
-}
-
-- (NSString*) localizedErrorTitle:(NSUInteger)errorCode {
-    switch (errorCode) {
-        case BSFacebookLoginServiceErrorNotInitialized:
-            return NSLocalizedString(@"Facebook Login", @"loginservice.facebook.title");
-        case BSFacebookLoginServiceErrorConnectionFailed:
-            return NSLocalizedString(@"Facebook Login", @"loginservice.facebook.title");
-        default:
-            return [super localizedErrorMessage:errorCode];
+        self.facebookId = [defaults objectForKey:@"FBFacebookID"];
+        self.facebookSessionToken = [defaults objectForKey:@"FBAccessTokenKey"];
     }
 }
 
@@ -100,27 +91,28 @@
 }
 
 - (void) request:(FBRequest *)request didFailWithError:(NSError *)error {
-    [self failWithError:BSFacebookLoginServiceErrorFailedToRetrieveInfo];
+    [self failWithError:[self errorWithDescription:NSLocalizedString(@"Failed to retrieve user informations", @"facebook.failedToRetrieveInfo")]];
 }
 
 - (void) fbDidExtendToken:(NSString *)accessToken expiresAt:(NSDate *)expiresAt {
     [_facebook requestWithGraphPath:@"me" andDelegate:self];
+    self.facebookSessionToken = _facebook.accessToken;
 }
 
 - (void) fbDidLogin {
     [_facebook requestWithGraphPath:@"me" andDelegate:self];
+    self.facebookSessionToken = _facebook.accessToken;
 }
 
 - (void) fbDidLogout {
-    [self logoutSuccessful];
 }
 
 - (void) fbDidNotLogin:(BOOL)cancelled {
-    [self failWithError:BSFacebookLoginServiceErrorConnectionFailed];
+    [self failWithError:[self errorWithDescription:NSLocalizedString(@"Connection failed", @"facebook.connectionFailed")]];
 }
 
 - (void) fbSessionInvalidated {
-    [self fail];
+    [self failWithError:[self errorWithDescription:NSLocalizedString(@"Session invalidated", @"facebook.sessionInvalidated")]];
 }
 
 @end

@@ -10,5 +10,6 @@
 #import "BSLoginService.h"
 
 @interface BSLoginSegue : UIStoryboardSegue <BSLoginServiceDelegate>
-@property (nonatomic, retain, readwrite) BSLoginService* service;
+- (BSLoginService*) serviceForId:(NSUInteger)sid;
+- (NSUInteger) serviceCount;
 @end

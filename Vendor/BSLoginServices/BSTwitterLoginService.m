@@ -12,19 +12,24 @@
 
 - (BOOL) _loginAccountSelection;
 - (BOOL) _loginTwitter;
+- (NSError*) errorWithDescription:(NSString*)description;
 
 @end
 
 @implementation BSTwitterLoginService
 @synthesize accountStore = _accountStore;
 @synthesize twitterAccount = _twitterAccount;
-@synthesize twitterData = _twitterData;
 @synthesize email;
 @synthesize firstName;
 @synthesize lastName;
 @synthesize birthdayDate;
 @synthesize twitterId;
 @synthesize screenName;
+
+- (NSError*) errorWithDescription:(NSString *)description {
+    NSError *err = [NSError errorWithDomain:NSLocalizedString(@"Twitter Login", @"twitter.login") code:1 userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
+    return err;
+}
 
 /**
  * Used internally to perform the account selection
@@ -35,7 +40,7 @@
     
     // If there are no accounts, we fail
     if(twitterAccounts == nil || [twitterAccounts count] == 0) {
-        [self failWithError:BSTwitterLoginServiceErrorNoAccounts];
+        [self failWithError:[self errorWithDescription:NSLocalizedString(@"No Twitter account found! You can add one in the Settings app", @"twitter.noaccount")]];
         return NO;
         
     // Else, we set the first Twitter Accountsssss
@@ -59,7 +64,7 @@
     [req performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
         // If there was an error making the request, display a message to the user
         if(error != nil) {
-            [self failWithError:BSTwitterLoginServiceErrorConnectionFailed];
+            [self failWithError:[self errorWithDescription:NSLocalizedString(@"Connection failed", @"twitter.connectionFailed")]];
             return;
         }
         
@@ -69,11 +74,11 @@
         
         // If there was an error decoding the JSON, display a message to the user
         if(jsonError != nil) {
-            [self failWithError:BSTwitterLoginServiceErrorParsingError];
+            [self failWithError:[self errorWithDescription:NSLocalizedString(@"Server error", @"twitter.serverError")]];
             return;
         }
-        
-        self.twitterData = resp;
+
+        DLog(@"%@", resp);
         
         self.twitterId = [resp objectForKey:@"id_str"];
         self.screenName = [resp objectForKey:@"screen_name"];
@@ -104,38 +109,8 @@
         }
         
         // Else, fail
-        [self failWithError:BSTwitterLoginServiceErrorNotGranted];
+        [self failWithError:[self errorWithDescription:NSLocalizedString(@"Login not granted", @"twitter.loginNotGranted")]];
     }];
-}
-
-- (NSString*) localizedErrorMessage:(NSUInteger)errorCode {
-    switch (errorCode) {
-        case BSTwitterLoginServiceErrorNoAccounts:
-            return NSLocalizedString(@"You can add a Twitter account in the Settings app.", @"loginservice.twitter.noaccount.message");
-        case BSTwitterLoginServiceErrorConnectionFailed:
-            return NSLocalizedString(@"Connection failed", @"loginservice.twitter.failed.message");
-        case BSTwitterLoginServiceErrorNotGranted:
-            return NSLocalizedString(@"Permission not granted", @"loginservice.twitter.notgranted.message");
-        case BSTwitterLoginServiceErrorParsingError:
-            return NSLocalizedString(@"Server error", @"loginservice.twitter.parseerror.message");
-        default:
-            return [super localizedErrorMessage:errorCode];
-    }
-}
-
-- (NSString*) localizedErrorTitle:(NSUInteger)errorCode {
-    switch (errorCode) {
-        case BSTwitterLoginServiceErrorNoAccounts:
-            return NSLocalizedString(@"No Twitter account", @"loginservice.twitter.noaccount.title");
-        case BSTwitterLoginServiceErrorConnectionFailed:
-            return NSLocalizedString(@"Twitter Login", @"loginservice.twitter.title");
-        case BSTwitterLoginServiceErrorNotGranted:
-            return NSLocalizedString(@"Twitter Login", @"loginservice.twitter.title");
-        case BSTwitterLoginServiceErrorParsingError:
-            return NSLocalizedString(@"Twitter Login", @"loginservice.twitter.title");
-        default:
-            return [super localizedErrorMessage:errorCode];
-    }
 }
 
 // Managed by iOS, so nothing to do

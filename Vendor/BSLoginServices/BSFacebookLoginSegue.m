@@ -11,10 +11,13 @@
 
 @implementation BSFacebookLoginSegue
 
-- (BSFacebookLoginService*) service {
+- (BSLoginService*) serviceForId:(NSUInteger)sid {
     BSFacebookLoginService* svc = [(id<BSFacebookLoginProvider>)[[UIApplication sharedApplication] delegate] facebookLoginService];
-    self.service = svc;
     return svc;
+}
+
+- (NSUInteger) serviceCount {
+    return 1;
 }
 
 @end

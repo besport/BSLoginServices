@@ -41,7 +41,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb405996246098031</string>
+				<string>fb&lt;appid&gt;</string>
 			</array>
 		</dict>
 	</array>

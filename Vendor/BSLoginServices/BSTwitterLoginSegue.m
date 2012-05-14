@@ -11,10 +11,13 @@
 
 @implementation BSTwitterLoginSegue
 
-- (BSTwitterLoginService*) service {
+- (BSLoginService*) serviceForId:(NSUInteger)sid {
     BSTwitterLoginService* svc = [(id<BSTwitterLoginProvider>)[[UIApplication sharedApplication] delegate] twitterLoginService];
-    self.service = svc;
     return svc;
+}
+
+- (NSUInteger) serviceCount {
+    return 1;
 }
 
 @end
