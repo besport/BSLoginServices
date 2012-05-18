@@ -6,6 +6,15 @@ At the moment, only Twitter, Facebook, LinkedIn and RunKeeper are supported, but
 
 # How to use?
 
+First, you have to run the following commands in a terminal, at the base directory :
+
+```
+$ git submodule init
+$ git submodule update
+```
+
+This will update and download the submodules (at the moment, Facebook and MKNetworkKit) from GitHub.
+
 `BSLoginServices` uses the third-party Facebook SDK, as well as the iOS 5 Twitter Framework and others, so there is quite a number of things to setup before you can use it.
 
 If you want to test it, you should use the `LoginServices.workspace` workspace file, as it should be already set up, aside from your App's IDs and secret keys.
