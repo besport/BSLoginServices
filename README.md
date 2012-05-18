@@ -1,3 +1,18 @@
+_This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version._
+
+_This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details._
+
+_You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>._
+
+# What is BSLoginServices?
+
 While learning how to use the new iOS 5 Storyboards, I quickly found myself in need of something : I wanted to have a Segue that would log the user in -- or verify an already existing one, _before_ it pushed the view. The `BSLoginServices` library is the result of my work.
 
 ![Image](https://github.com/besport/BSLoginServices/raw/master/_Images/CustomSegue.png)
