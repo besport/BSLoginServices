@@ -64,5 +64,5 @@ Now you can directly use the segue in your storyboard!
 
 This code is still very new, so there might be bugs! If you find one, create a GitHub issue and tell me what happened!
 
-Initially, I designed this library for use with our mobile app at [BeSport](http://www.besport.com), and they agreed to release it under the LGPL.
-You can contact me on GitHub (@fxthomas), on [Google+](https://plus.google.com/111834675378115409903) or by email at _fx dot thomas at gmail dot com_.
+This library is being developed at [Be Sport](http://www.besport.com) by @fxthomas.
+You can contact me on GitHub or on [Google+](https://plus.google.com/111834675378115409903).
