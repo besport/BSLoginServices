@@ -44,4 +44,7 @@
 - (void) succeed;
 - (void) failWithError:(NSError*)error;
 
+- (void) saveObject:(id)object forKey:(NSString*)key;
+- (id) restoreObjectForKey:(NSString*)key;
+
 @end

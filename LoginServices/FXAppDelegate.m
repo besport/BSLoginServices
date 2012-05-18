@@ -11,13 +11,25 @@
 @implementation FXAppDelegate
 
 @synthesize window = _window;
-@synthesize facebookLoginService;
-@synthesize twitterLoginService;
+@synthesize facebookLoginService = _facebookLoginService;
+@synthesize twitterLoginService = _twitterLoginService;
+@synthesize linkedInLoginService = _linkedInLoginService;
+@synthesize runKeeperLoginService = _runKeeperLoginService;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.facebookLoginService = [[BSFacebookLoginService alloc] initWithAppId:@""];
+    // Start up Facebook login service
+    self.facebookLoginService = [[BSFacebookLoginService alloc] initWithAppId:@"YOUR FACEBOOK APP ID"];
+    self.facebookLoginService.permissions = [NSArray arrayWithObjects:@"email", nil];
+    
+    // Start up Twitter login service
     self.twitterLoginService = [[BSTwitterLoginService alloc] init];
+    
+    // Start up LinkedIn login service
+    self.linkedInLoginService = [[BSLinkedInLoginService alloc] initWithConsumerKey:@"" secret:@""];
+    
+    // Start up RunKeeper login service
+    self.runKeeperLoginService = [[BSRunKeeperLoginService alloc] initWithClientId:@"" secret:@""];
     return YES;
 }
 							
@@ -49,11 +61,11 @@
 }
 
 - (BOOL) application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [facebookLoginService.facebook handleOpenURL:url];
+    return [_facebookLoginService.facebook handleOpenURL:url];
 }
 
 - (BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [facebookLoginService.facebook handleOpenURL:url];
+    return [_facebookLoginService.facebook handleOpenURL:url];
 }
 
 @end

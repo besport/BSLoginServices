@@ -97,6 +97,11 @@
  * Login entry point
  */
 - (void) login {
+    if (self.isLoggedIn) {
+        [self succeed];
+        return;
+    }
+    
     // Create a connection to the account store
     self.accountStore = [[ACAccountStore alloc] init];
     
@@ -114,7 +119,10 @@
 }
 
 // Managed by iOS, so nothing to do
-- (void) logout { }
+- (void) logout {
+    self.isLoggedIn = NO;
+}
+
 - (void) save { }
 - (void) restore { }
 

@@ -29,6 +29,10 @@
         uiHelloLabel.text = [NSString stringWithFormat:@"Hello, %@!", appDelegate.facebookLoginService.firstName];
     } else if (appDelegate.twitterLoginService.isLoggedIn) {
         uiHelloLabel.text = [NSString stringWithFormat:@"Hello, @%@!", appDelegate.twitterLoginService.screenName];
+    } else if (appDelegate.linkedInLoginService.isLoggedIn) {
+        uiHelloLabel.text = [NSString stringWithFormat:@"Hello, %@!", appDelegate.linkedInLoginService.firstName];
+    } else if (appDelegate.runKeeperLoginService.isLoggedIn) {
+        uiHelloLabel.text = [NSString stringWithFormat:@"Hello, %@!", appDelegate.runKeeperLoginService.firstName];
     }
 }
 

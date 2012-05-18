@@ -43,6 +43,11 @@
 #pragma mark - Login Service methods
 
 - (void) login {
+    if (self.isLoggedIn) {
+        [self succeed];
+        return;
+    }
+    
     if (!_facebook) {
         [self failWithError:[self errorWithDescription:NSLocalizedString(@"Facebook initialization failed", @"facebook.initializationFailed")]];
     }
@@ -55,25 +60,20 @@
 
 - (void) logout {
     if (_facebook) [_facebook logout];
+    else self.isLoggedIn = NO;
 }
 
 - (void) save {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (_facebook.accessToken) [defaults setObject:[_facebook accessToken] forKey:@"FBAccessTokenKey"];
-    if (_facebook.expirationDate) [defaults setObject:[_facebook expirationDate] forKey:@"FBExpirationDateKey"];
-    if (self.facebookId) [defaults setObject:self.facebookId forKey:@"FBFacebookID"];
-    [defaults synchronize];
+    [self saveObject:_facebook.accessToken    forKey:@"FBAccessTokenKey"];
+    [self saveObject:_facebook.expirationDate forKey:@"FBExpirationDateKey"];
+    [self saveObject:_facebookId              forKey:@"FBFacebookID"];
 }
 
 - (void) restore {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"FBAccessTokenKey"] 
-        && [defaults objectForKey:@"FBExpirationDateKey"]) {
-        _facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
-        _facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
-        self.facebookId = [defaults objectForKey:@"FBFacebookID"];
-        self.facebookSessionToken = [defaults objectForKey:@"FBAccessTokenKey"];
-    }
+    self.facebookSessionToken = [self restoreObjectForKey:@"FBAccessTokenKey"];
+    _facebook.accessToken     = [self restoreObjectForKey:@"FBAccessTokenKey"];
+    _facebook.expirationDate  = [self restoreObjectForKey:@"FBExpirationDateKey"];
+    self.facebookId           = [self restoreObjectForKey:@"FBFacebookID"];
 }
 
 #pragma mark - Facebook delegate
@@ -105,6 +105,7 @@
 }
 
 - (void) fbDidLogout {
+    self.isLoggedIn = NO;
 }
 
 - (void) fbDidNotLogin:(BOOL)cancelled {

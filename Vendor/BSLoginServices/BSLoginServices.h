@@ -10,5 +10,7 @@
 
 #import "BSFacebookLoginService.h"
 #import "BSTwitterLoginService.h"
+#import "BSLinkedInLoginService.h"
+#import "BSRunKeeperLoginService.h"
 
 #endif

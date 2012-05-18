@@ -44,6 +44,19 @@
     });
 }
 
+- (void) saveObject:(id)object forKey:(NSString *)key {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if (object) [defaults setObject:object forKey:key];
+    else [defaults removeObjectForKey:key];
+    
+    [defaults synchronize];
+}
+
+- (id) restoreObjectForKey:(NSString *)key {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:key];
+}
+
 #pragma mark - Methods to implement in subclasses
 
 - (void) login {

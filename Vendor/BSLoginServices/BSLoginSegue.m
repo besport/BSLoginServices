@@ -61,8 +61,12 @@
     }
     
     // Display the failure
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:error.domain message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alertView show];
+    if (error) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:error.domain message:error.localizedDescription delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alertView show];
+    } else {
+        NSLog(@"LoginSegue: Unknown error");
+    }
     
     // Stop the activity indicator
     if ([self.sourceViewController respondsToSelector:@selector(activityIndicator)]) {
